@@ -12,7 +12,7 @@ func getPostsFromTwitter(urlToCrawl string) []Post {
 	c := colly.NewCollector()
 
 	c.OnResponse(func(r *colly.Response) {
-		htmlString := string(r.Body)
+		// htmlString := string(r.Body)
 		// fmt.Println(htmlString)
 	})
 
