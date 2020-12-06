@@ -23,29 +23,38 @@ func getPostsFromYoutube(urlToCrawl string) []Post {
 		if somethingFound {
 			start := strings.Index(htmlString, "{\"contents\":[{\"videoRenderer\":")
 			end := strings.Index(htmlString, "{\"searchSubMenuRenderer\"")
-			substringToWorkWith := htmlString[start:end]
+			if start > 0 && end > 0 {
+				substringToWorkWith := htmlString[start:end]
 
-			splittedInfo := strings.Split(substringToWorkWith, "{\"videoRenderer\":")
-			if len(splittedInfo) > 1 {
-				for i := 1; i < len(splittedInfo); i++ {
-					splitted := splittedInfo[i]
+				splittedInfo := strings.Split(substringToWorkWith, "{\"videoRenderer\":")
+				if len(splittedInfo) > 1 {
+					for i := 1; i < len(splittedInfo); i++ {
+						splitted := splittedInfo[i]
 
-					start = strings.Index(splitted, "\"videoId\":\"") + len("\"videoId\":\"")
-					end = strings.Index(splitted, "\",\"")
-					link := "https://www.youtube.com/watch?v=" + splitted[start:end]
+						start = strings.Index(splitted, "\"videoId\":\"") + len("\"videoId\":\"")
+						end = strings.Index(splitted, "\",\"")
+						if start > 0 && end > 0 {
+							link := "https://www.youtube.com/watch?v=" + splitted[start:end]
 
-					start = strings.Index(splitted, "{\"text\":\"") + len("{\"text\":\"")
-					end = strings.Index(splitted, "\"}]")
-					title := splitted[start:end]
+							start = strings.Index(splitted, "{\"text\":\"") + len("{\"text\":\"")
+							end = strings.Index(splitted, "\"}]")
+							if start > 0 && end > 0 {
+								title := splitted[start:end]
 
-					start = strings.Index(splitted, "\"publishedTimeText\":{\"simpleText\":\"") + len("\"publishedTimeText\":{\"simpleText\":\"")
-					end = strings.Index(splitted, "\"},\"lengthText\"")
-					date := splitted[start:end]
+								start = strings.Index(splitted, "\"publishedTimeText\":{\"simpleText\":\"") + len("\"publishedTimeText\":{\"simpleText\":\"")
+								end = strings.Index(splitted, "\"},\"lengthText\"")
+								if start > 0 && end > 0 {
+									date := splitted[start:end]
 
-					postToReturn := Post{Date: date, Title: title, Link: link}
-					postsToReturn = append(postsToReturn, postToReturn)
+									postToReturn := Post{Date: date, Title: title, Link: link}
+									postsToReturn = append(postsToReturn, postToReturn)
+								}
+							}
+						}
+					}
 				}
 			}
+
 		}
 	})
 
