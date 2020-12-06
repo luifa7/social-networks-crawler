@@ -1,4 +1,4 @@
-package types
+package crawlers
 
 // Post is the model for the posts
 type Post struct {

@@ -1,4 +1,4 @@
-package types
+package crawlers
 
 // SocialNetwork is the model for the SN results
 type SocialNetwork struct {
