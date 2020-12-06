@@ -2,18 +2,10 @@ package crawlers
 
 // facebook hashtag is now only for logged in users
 
-/* import (
-	"fmt"
-	"strings"
-	"time"
-
-	"github.com/gocolly/colly"
-)
-
 func getPostsFromFacebook(urlToCrawl string) []Post {
 	postsToReturn := []Post{}
 
-	c := colly.NewCollector()
+	/* c := colly.NewCollector()
 
 	c.OnResponse(func(r *colly.Response) {
 		htmlString := string(r.Body)
@@ -56,13 +48,13 @@ func getPostsFromFacebook(urlToCrawl string) []Post {
 		fmt.Println("Visiting", r.URL.String())
 	})
 
-	c.Visit(urlToCrawl)
+	c.Visit(urlToCrawl) */
 
 	return postsToReturn
 }
 
 // FilterNewLines change bit code new lines
-func FilterNewLines(s string) string {
+/* func FilterNewLines(s string) string {
 	return strings.Map(func(r rune) rune {
 		switch r {
 		case 0x000A, 0x000B, 0x000C, 0x000D, 0x0085, 0x2028, 0x2029:
@@ -71,43 +63,13 @@ func FilterNewLines(s string) string {
 			return r
 		}
 	}, s)
-}
+} */
 
 // FindFacebookInfo return posts
-func FindFacebookInfo(facebookToCrawl string) SocialNetwork {
-	facebookToReturn := SocialNetwork{}
+func FindFacebookInfo(hashtagToCrawl string) SocialNetwork {
+	hashtagToCrawl = normalizeWithSymbol(hashtagToCrawl, "")
+	urlToCrawl := "https://de-de.facebook.com/hashtag/" + hashtagToCrawl
+	posts := getPostsFromFacebook(urlToCrawl)
 
-	if strings.Contains(facebookToCrawl, " ") {
-		facebookToCrawl = strings.Replace(facebookToCrawl, " ", "", -1)
-	}
-
-	networkURLToCrawl := "https://de-de.facebook.com/hashtag/" + facebookToCrawl
-	posts := getPostsFromFacebook(networkURLToCrawl)
-	facebookToReturn.Tag = facebookToCrawl
-	facebookToReturn.Count = len(posts)
-	facebookToReturn.Posts = posts
-	if len(posts) > 0 {
-		layout := "02.01.2006 15:04"
-		newestDate := posts[0].Date
-		newestDateTime, err := time.Parse(layout, newestDate)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		for _, post := range posts {
-			thisPostDate, err := time.Parse(layout, post.Date)
-			if err != nil {
-				fmt.Println(err)
-			} else {
-				if thisPostDate.After(newestDateTime) {
-					newestDate = post.Date
-					newestDateTime = thisPostDate
-				}
-			}
-		}
-		facebookToReturn.NewestPostDate = newestDate
-	}
-
-	return facebookToReturn
+	return makeSocialNetwork("facebook", hashtagToCrawl, posts)
 }
-*/
